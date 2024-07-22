@@ -28,12 +28,12 @@ clint_t::clint_t(const simif_t* sim, uint64_t freq_hz, bool real_time)
  * bffc mtime hi
  */
 
+// #define MSIP_BASE	0x0
+// #define MTIMECMP_BASE	0x4000
+// #define MTIME_BASE	0xbff8
 #define MSIP_BASE	0x0
-#define MTIMECMP_BASE	0x4000
-#define MTIME_BASE	0xbff8
-// #define MSIP_BASE	0x4000
-// #define MTIMECMP_BASE	0x4008
-// #define MTIME_BASE	0x4020
+#define MTIMECMP_BASE	0x4008
+#define MTIME_BASE	0x4020
 
 bool clint_t::load(reg_t addr, size_t len, uint8_t* bytes)
 {  
