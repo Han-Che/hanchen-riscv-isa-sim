@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <getopt.h>
+#include "sim.h"
 
 /* Attempt to determine the execution prefix automatically.  autoconf
  * sets PREFIX, and pconfigure sets __PCONFIGURE__PREFIX. */
@@ -256,8 +257,8 @@ int htif_t::run()
     while (!signal_exit)
       idle();
   }
-
-  while (!signal_exit && exitcode == 0)
+  extern int Flag;
+  while (!signal_exit && exitcode == 0 && Flag == 0)
   {
     uint64_t tohost;
 

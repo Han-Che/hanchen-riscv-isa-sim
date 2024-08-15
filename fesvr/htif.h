@@ -16,6 +16,7 @@
 class htif_t : public chunked_memif_t
 {
  public:
+  int exitcode;
   htif_t();
   htif_t(int argc, char** argv);
   htif_t(const std::vector<std::string>& args);
@@ -93,7 +94,7 @@ class htif_t : public chunked_memif_t
   addr_t sig_len; // torture
   addr_t tohost_addr;
   addr_t fromhost_addr;
-  int exitcode;
+
   bool stopped;
 
   device_list_t device_list;

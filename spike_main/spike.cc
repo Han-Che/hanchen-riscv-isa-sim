@@ -322,6 +322,7 @@ static std::vector<size_t> parse_hartids(const char *s)
 
   return hartids;
 }
+int Maxins = INT_MAX;
 
 int main(int argc, char** argv)
 {
@@ -462,6 +463,8 @@ int main(int argc, char** argv)
     }
   });
 
+  parser.option(0, "maxins", 1, [&](const char* s){Maxins = atoul_safe(s);});
+
   auto argv1 = parser.parse(argv);
   std::vector<std::string> htif_args(argv1, (const char*const*)argv + argc);
 
@@ -522,7 +525,7 @@ int main(int argc, char** argv)
   sim_t s(&cfg, halted,
       mems, plugin_device_factories, htif_args, dm_config, log_path, dtb_enabled, dtb_file,
       socket,
-      cmd_file);
+      cmd_file,Maxins);
   std::unique_ptr<remote_bitbang_t> remote_bitbang((remote_bitbang_t *) NULL);
   std::unique_ptr<jtag_dtm_t> jtag_dtm(
       new jtag_dtm_t(&s.debug_module, dmi_rti));

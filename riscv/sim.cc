@@ -44,7 +44,7 @@ sim_t::sim_t(const cfg_t *cfg, bool halted,
              const char *log_path,
              bool dtb_enabled, const char *dtb_file,
              bool socket_enabled,
-             FILE *cmd_file) // needed for command line option --cmd
+             FILE *cmd_file, int maxins) // needed for command line option --cmd
   : htif_t(args),
     isa(cfg->isa, cfg->priv),
     cfg(cfg),
@@ -60,7 +60,8 @@ sim_t::sim_t(const cfg_t *cfg, bool halted,
     histogram_enabled(false),
     log(false),
     remote_bitbang(NULL),
-    debug_module(this, dm_config)
+    debug_module(this, dm_config),
+    _maxins(maxins)
 {
   signal(SIGINT, &handle_signal);
 
@@ -268,7 +269,7 @@ void sim_t::step(size_t n)
   for (size_t i = 0, steps = 0; i < n; i += steps)
   {
     steps = std::min(n - i, INTERLEAVE - current_step);
-    procs[current_proc]->step(steps);
+    procs[current_proc]->step(steps, _maxins);
 
     current_step += steps;
     if (current_step == INTERLEAVE)
@@ -377,6 +378,10 @@ void sim_t::set_rom()
   std::vector<char> rom((char*)reset_vec, (char*)reset_vec + sizeof(reset_vec));
 
   rom.insert(rom.end(), dtb.begin(), dtb.end());
+  for(char c : dtb){
+    printf(".byte 0x%02x\n", (unsigned char)c);
+  }
+
   const int align = 0x1000;
   rom.resize((rom.size() + align - 1) / align * align);
 
@@ -407,6 +412,8 @@ void sim_t::reset()
     set_rom();
 }
 
+// static int cur_num = 0;
+
 void sim_t::idle()
 {
   if (done())
@@ -416,6 +423,12 @@ void sim_t::idle()
     interactive();
   else
     step(INTERLEAVE);
+
+  // cur_num += 5000;
+  // if(cur_num >= _maxins){
+  //   exitcode = 1;  
+  //   return;
+  // }
 
   if (remote_bitbang)
     remote_bitbang->tick();

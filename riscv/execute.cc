@@ -6,6 +6,7 @@
 #include "disasm.h"
 #include "decode_macros.h"
 #include <cassert>
+#include "sim.h"
 
 static void commit_log_reset(processor_t* p)
 {
@@ -208,8 +209,12 @@ bool processor_t::slow_path()
          log_commits_enabled || histogram_enabled || in_wfi || check_triggers_icount;
 }
 
+static int cur_num = 0;
+int Flag = 0;
+// extern int Maxins;
+// extern int exitcode;
 // fetch/decode/execute loop
-void processor_t::step(size_t n)
+void processor_t::step(size_t n, int Maxins)
 {
   if (!state.debug_mode) {
     if (halt_request == HR_REGULAR) {
@@ -233,14 +238,14 @@ void processor_t::step(size_t n)
       if (unlikely(invalid_pc(pc))) { \
         switch (pc) { \
           case PC_SERIALIZE_BEFORE: state.serialized = true; break; \
-          case PC_SERIALIZE_AFTER: ++instret; break; \
+          case PC_SERIALIZE_AFTER: ++instret; cur_num++; break; \
           default: abort(); \
         } \
         pc = state.pc; \
         break; \
       } else { \
         state.pc = pc; \
-        instret++; \
+        instret++; cur_num++;\
       }
 
     try
@@ -286,6 +291,10 @@ void processor_t::step(size_t n)
             disasm(fetch.insn);
           pc = execute_insn_logged(this, pc, fetch);
           advance_pc();
+          if(cur_num >= Maxins){
+            Flag = 1;
+            break;
+          }
         }
       }
       else while (instret < n)
@@ -350,5 +359,7 @@ void processor_t::step(size_t n)
     state.mcycle->bump(instret);
 
     n -= instret;
+    if(Flag == 1)
+      break;
   }
 }
