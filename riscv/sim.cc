@@ -269,7 +269,7 @@ void sim_t::step(size_t n)
   for (size_t i = 0, steps = 0; i < n; i += steps)
   {
     steps = std::min(n - i, INTERLEAVE - current_step);
-    procs[current_proc]->step(steps, _maxins);
+    procs[current_proc]->step(steps);
 
     current_step += steps;
     if (current_step == INTERLEAVE)
@@ -423,12 +423,6 @@ void sim_t::idle()
     interactive();
   else
     step(INTERLEAVE);
-
-  // cur_num += 5000;
-  // if(cur_num >= _maxins){
-  //   exitcode = 1;  
-  //   return;
-  // }
 
   if (remote_bitbang)
     remote_bitbang->tick();

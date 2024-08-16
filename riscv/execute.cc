@@ -212,10 +212,10 @@ bool processor_t::slow_path()
 static int cur_num = 0;
 int Flag = 0;
 extern int flag_mret;
-// extern int Maxins;
+extern int Maxins;
 // extern int exitcode;
 // fetch/decode/execute loop
-void processor_t::step(size_t n, int Maxins)
+void processor_t::step(size_t n)
 {
   if (!state.debug_mode) {
     if (halt_request == HR_REGULAR) {
