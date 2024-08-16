@@ -210,7 +210,7 @@ bool processor_t::slow_path()
 }
 
 static int cur_num = 0;
-int Flag = 0;
+int flag_exit = 0;
 extern int flag_mret;
 extern int Maxins;
 // extern int exitcode;
@@ -298,7 +298,7 @@ void processor_t::step(size_t n)
           if(flag_mret == 0)
             cur_num = 0;
           if(cur_num >= Maxins){
-            Flag = 1;
+            flag_exit = 1;
             break;
           }
         }
@@ -365,7 +365,7 @@ void processor_t::step(size_t n)
     state.mcycle->bump(instret);
 
     n -= instret;
-    if(Flag == 1)
+    if(flag_exit == 1)
       break;
   }
 }

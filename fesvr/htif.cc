@@ -244,6 +244,7 @@ void htif_t::clear_chunk(addr_t taddr, size_t len)
     write_chunk(taddr + pos, std::min(len - pos, chunk_max_size()), zeros);
 }
 
+extern int flag_exit;
 int htif_t::run()
 {
   start();
@@ -257,8 +258,8 @@ int htif_t::run()
     while (!signal_exit)
       idle();
   }
-  extern int Flag;
-  while (!signal_exit && exitcode == 0 && Flag == 0)
+
+  while (!signal_exit && exitcode == 0 && flag_exit == 0)
   {
     uint64_t tohost;
 
