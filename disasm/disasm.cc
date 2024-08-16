@@ -578,9 +578,13 @@ typedef struct {
   std::vector<const arg_t*>& arg;
 } custom_fmt_t;
 
+int flag_mret=0;
 std::string disassembler_t::disassemble(insn_t insn) const
 {
   const disasm_insn_t* disasm_insn = lookup(insn);
+  if(strcmp(disasm_insn->get_name(), "mret") == 0){
+    flag_mret = 1;
+  }
   return disasm_insn ? disasm_insn->to_string(insn) : "unknown";
 }
 

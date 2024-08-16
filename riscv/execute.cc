@@ -211,6 +211,7 @@ bool processor_t::slow_path()
 
 static int cur_num = 0;
 int Flag = 0;
+extern int flag_mret;
 // extern int Maxins;
 // extern int exitcode;
 // fetch/decode/execute loop
@@ -286,11 +287,16 @@ void processor_t::step(size_t n, int Maxins)
           }
 
           in_wfi = false;
+          //这段代码是处理器执行循环的一部分，它负责获取指令、在调试模式下可能进行反汇编（如果不是序列化状态）、执行指令，
+          //并更新程序计数器以指向下一条指令
           insn_fetch_t fetch = mmu->load_insn(pc);
           if (debug && !state.serialized)
             disasm(fetch.insn);
           pc = execute_insn_logged(this, pc, fetch);
+          
           advance_pc();
+          if(flag_mret == 0)
+            cur_num = 0;
           if(cur_num >= Maxins){
             Flag = 1;
             break;
