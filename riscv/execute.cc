@@ -297,7 +297,7 @@ void processor_t::step(size_t n)
           advance_pc();
           if(flag_mret == 0)
             cur_num = 0;
-          if(cur_num >= Maxins){
+          if(cur_num >= Maxins+1){
             flag_exit = 1;
             break;
           }
