@@ -378,9 +378,9 @@ void sim_t::set_rom()
   std::vector<char> rom((char*)reset_vec, (char*)reset_vec + sizeof(reset_vec));
 
   rom.insert(rom.end(), dtb.begin(), dtb.end());
-  for(char c : dtb){
-    printf(".byte 0x%02x\n", (unsigned char)c);
-  }
+  // for(char c : dtb){
+  //   printf(".byte 0x%02x\n", (unsigned char)c);
+  // }
 
   const int align = 0x1000;
   rom.resize((rom.size() + align - 1) / align * align);

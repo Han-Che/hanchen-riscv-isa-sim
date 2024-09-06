@@ -12,6 +12,8 @@
 #define PLIC_PRIO_BITS     4
 #define NS16550_BASE       0x10000000
 #define NS16550_SIZE       0x100
+//#define NS16550_BASE       0x29180000
+// #define NS16550_SIZE       0x10000
 #define NS16550_REG_SHIFT  0
 #define NS16550_REG_IO_WIDTH 1
 #define NS16550_INTERRUPT_ID 1

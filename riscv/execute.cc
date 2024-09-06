@@ -163,7 +163,7 @@ inline void processor_t::update_histogram(reg_t pc)
 static inline reg_t execute_insn_fast(processor_t* p, reg_t pc, insn_fetch_t fetch) {
   return fetch.func(p, fetch.insn, pc);
 }
-static inline reg_t execute_insn_logged(processor_t* p, reg_t pc, insn_fetch_t fetch)
+static inline reg_t execute_insn_logged(processor_t* p, reg_t pc, insn_fetch_t fetch)  //参数：处理器对象、当前pc、要执行的指令
 {
   if (p->get_log_commits_enabled()) {
     commit_log_reset(p);
@@ -213,8 +213,6 @@ static int cur_num = 0;
 int flag_exit = 0;
 extern int flag_mret;
 extern int Maxins;
-// extern int exitcode;
-// fetch/decode/execute loop
 void processor_t::step(size_t n)
 {
   if (!state.debug_mode) {

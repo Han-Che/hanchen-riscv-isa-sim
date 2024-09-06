@@ -81,7 +81,8 @@ ns16550_t::ns16550_t(abstract_interrupt_controller_t *intctrl,
   iir = UART_IIR_NO_INT;
   fcr = 0;
   lcr = 0;
-  lsr = UART_LSR_TEMT | UART_LSR_THRE;
+  // lsr = UART_LSR_TEMT | UART_LSR_THRE;
+  lsr = 0;
   msr = UART_MSR_DCD | UART_MSR_DSR | UART_MSR_CTS;
   dll = 0x0C;
   mcr = UART_MCR_OUT2;
@@ -168,9 +169,9 @@ bool ns16550_t::load(reg_t addr, size_t len, uint8_t* bytes)
   uint8_t val;
   bool ret = true, update = false;
 
-  if (reg_io_width != len) {
-    return false;
-  }
+  // if (reg_io_width != len) {
+  //   return false;
+  // }
   if (addr + len > PGSIZE) {
     return false;
   }
@@ -231,9 +232,9 @@ bool ns16550_t::store(reg_t addr, size_t len, const uint8_t* bytes)
   uint8_t val;
   bool ret = true, update = false;
 
-  if (reg_io_width != len) {
-    return false;
-  }
+  // if (reg_io_width != len) {
+  //   return false;
+  // }
   if (addr + len > PGSIZE) {
     return false;
   }
@@ -296,7 +297,7 @@ bool ns16550_t::store(reg_t addr, size_t len, const uint8_t* bytes)
   };
 
   if (update) {
-    update_interrupt();
+    //  update_interrupt();
   }
 
   return ret;
